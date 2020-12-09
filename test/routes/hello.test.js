@@ -3,7 +3,7 @@ import fastify from 'fastify'
 import fp from 'fastify-plugin'
 import app from '../../app.js'
 
-const test = t.test
+const { test } = t
 
 test('load the hello world', async ({ is }) => {
   const server = fastify()
