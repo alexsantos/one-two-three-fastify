@@ -1,4 +1,5 @@
 import fastify from 'fastify'
+import App from './app.js'
 
 const app = fastify({
   logger: {
@@ -6,13 +7,14 @@ const app = fastify({
   }
 })
 
-app.register(import('./app.js'))
+app.register(App)
 
-const start = async function () {
+async function start () {
   try {
     await app.listen(process.env.PORT || 3000)
   } catch (e) {
-    console.error(e)
+    app.log.error(e)
+    process.exit(1)
   }
 }
 
