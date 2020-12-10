@@ -1,15 +1,25 @@
 import t from 'tap'
 import fastify from 'fastify'
 import fp from 'fastify-plugin'
-import app from '../../../app.js'
+import app from '../app.js'
 
-const test = t.test
+const { test } = t
 
-test('authentication', async ({ deepEqual }) => {
+test('login to obtain token for authentication', async (t) => {
   const server = fastify()
 
   // so we can access decorators
   server.register(fp(app))
+
+  const wrongPassword = await server.inject({
+    url: '/login',
+    method: 'POST',
+    body: {
+      username: 'matteo',
+      password: 'santos'
+    }
+  })
+  t.is(wrongPassword.statusCode, 401)
 
   const { token } = (await server.inject({
     url: '/login',
@@ -27,7 +37,7 @@ test('authentication', async ({ deepEqual }) => {
     }
   })
 
-  deepEqual(res.json(), { hello: 'world' })
+  t.deepEqual(res.json(), { hello: 'world' })
 
   await server.close()
 })

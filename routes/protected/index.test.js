@@ -3,16 +3,16 @@ import fastify from 'fastify'
 import fp from 'fastify-plugin'
 import app from '../../app.js'
 
-const { test } = t
+const test = t.test
 
-test('load the hello world', async ({ is }) => {
+test('no token provided for authentication', async (t) => {
   const server = fastify()
 
   // so we can access decorators
   server.register(fp(app))
 
-  const res = await server.inject('/')
-  is(res.body, 'hello world')
+  const res = await server.inject('/protected/something')
+  t.is(res.statusCode, 401)
 
   await server.close()
 })

@@ -1,7 +1,7 @@
 import t from 'tap'
 import fastify from 'fastify'
 import fp from 'fastify-plugin'
-import app from '../../../app.js'
+import app from '../../app.js'
 
 const test = t.test
 
