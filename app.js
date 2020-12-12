@@ -9,6 +9,10 @@ export default async function (app, opts) {
     }
   })
 
+  app.register(import('fastify-postgres'), {
+    connectionString: 'postgres://springsecurity:pass@localhost/springsecuritydb'
+  })
+
   app.decorate('authenticate', async function (request, reply) {
     try {
       await request.jwtVerify()
