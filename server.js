@@ -12,7 +12,8 @@ const start = async function () {
   try {
     await app.listen(process.env.PORT || 3000)
   } catch (e) {
-    console.error(e)
+    app.log.error(e)
+    process.exit(1)
   }
 }
 
