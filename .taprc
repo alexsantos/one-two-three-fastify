@@ -3,4 +3,3 @@ ts: false
 jsx: false
 flow: false
 coverage: false
-jobs: 1
