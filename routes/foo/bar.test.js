@@ -17,6 +17,17 @@ test('load inside a folder', async ({ is }) => {
   await server.close()
 })
 
+test('insert to database', async ({ is }) => {
+  const server = fastify()
+
+  // so we can access decorators
+  server.register(fp(app))
+  const res = await server.inject({ method: 'POST', url: '/foo/user', payload: { username: 'santosam72', password: 'pass' } })
+  is(res.statusCode, 201)
+  is(res.body, '{"id":1,"username":"santosam72","password":"pass"}')
+  await server.close()
+})
+
 test('access to database', async ({ is }) => {
   const server = fastify()
 
@@ -29,14 +40,12 @@ test('access to database', async ({ is }) => {
   await server.close()
 })
 
-test('insert to database', async ({ is }) => {
+t.tearDown(async () => {
   const server = fastify()
 
   // so we can access decorators
   server.register(fp(app))
-
-  const res = await server.inject({ method: 'POST', url: '/foo/user', payload: { username: 'santosam72', password: 'pass' } })
-  is(res.body, '[{"id":1,"username":"santosam72","password":"pass"}]')
-
-  await server.close()
+  const client = await app.pg.connect()
+  const result = await client.query('TRUNCATE TABLE users')
+  console.log(result)
 })

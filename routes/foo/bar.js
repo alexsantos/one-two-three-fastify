@@ -25,13 +25,15 @@ export default async function (app, opts) {
     const client = await app.pg.connect()
     try {
       const { rows } = await client.query('INSERT into users(username, password) VALUES ($1, $2) RETURNING *', [req.body.username, req.body.password])
-      client.release()
       res.code(201)
         .header('x-generated-id', rows[0].id)
         .send(rows[0])
     } catch (err) {
-      console.log(err)
-      res.code(400)
+      console.log('bar.js:' + err)
+      res.code(500)
+        .send({ status: 500, message: err })
+    } finally {
+      client.release()
     }
   })
 }
