@@ -1,4 +1,4 @@
-import S from 'fluent-schema'
+import S from 'fluent-json-schema'
 import errors from 'http-errors'
 
 export default async function (app, opts) {

@@ -1,5 +1,5 @@
 // import fastify from 'fastify'
-import S from 'fluent-schema'
+import S from 'fluent-json-schema'
 
 export default async function (app, opts) {
   app.get('/', async () => {
