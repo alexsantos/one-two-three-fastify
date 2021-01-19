@@ -7,13 +7,20 @@ export default async function (app, opts) {
   })
   app.get('/user/:id', async (req, res) => {
     const client = await app.pg.connect()
-    const { rows } = await client.query('SELECT * from users where id = $1', [req.params.id])
-    client.release()
-    if (rows.length === 0) {
-      res.code(404)
-        .send(`User with id ${req.params.id} not found`)
+    try {
+      const { rows } = await client.query('SELECT * from users where id = $1', [req.params.id])
+      if (rows.length === 0) {
+        res.code(404)
+          .send(`User with id ${req.params.id} not found`)
+      }
+      res.send(rows)
+    } catch (err) {
+      console.error(err)
+      res.code(500)
+        .send({ status: 500, message: err })
+    } finally {
+      client.release()
     }
-    res.send(rows)
   })
   app.post('/user', {
     schema: {

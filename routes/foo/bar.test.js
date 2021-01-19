@@ -39,13 +39,3 @@ test('access to database', async ({ is }) => {
 
   await server.close()
 })
-
-t.tearDown(async () => {
-  const server = fastify()
-
-  // so we can access decorators
-  server.register(fp(app))
-  const client = await app.pg.connect()
-  const result = await client.query('TRUNCATE TABLE users')
-  console.log(result)
-})
